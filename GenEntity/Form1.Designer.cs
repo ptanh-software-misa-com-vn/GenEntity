@@ -60,7 +60,7 @@
 			this.txtHeader.Size = new System.Drawing.Size(186, 165);
 			this.txtHeader.TabIndex = 2;
 			this.txtHeader.Text = "using System;\r\nusing System.Collections.Generic;\r\nusing System.ComponentModel;\r\n\r" +
-    "\nnamespace Zen.Kanri01";
+    "\nnamespace Zen.Model";
 			// 
 			// label1
 			// 

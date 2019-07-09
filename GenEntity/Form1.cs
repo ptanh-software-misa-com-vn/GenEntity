@@ -39,8 +39,11 @@ namespace GenEntity
 			}
 			catch (Exception)
 			{
-				dbConn.Close();
 				throw;
+			}
+			finally
+			{
+				dbConn.Close();
 			}
 			cboTable.DataSource = ds.Tables[0];
 			cboTable.DisplayMember = "TableName";
@@ -142,8 +145,11 @@ namespace GenEntity
 			}
 			catch (Exception)
 			{
-				dbConn.Close();
 				throw;
+			}
+			finally
+			{
+				dbConn.Close();
 			}
 			StringBuilder sbClass = new StringBuilder();
 			sbClass.AppendLine(txtHeader.Text);
@@ -161,7 +167,7 @@ namespace GenEntity
 				sbClass.AppendLine("        /// <summary>");
 				sbClass.AppendLine("        /// ");
 				sbClass.AppendLine("        /// </summary>");
-				sbClass.AppendLine(string.Format("    public {0} {1} {{ get; set; }}", en.ColumnName, en.ColumnType + en.NullableSign));
+				sbClass.AppendLine(string.Format("    public {0} {1} {{ get; set; }}", en.ColumnType + en.NullableSign, en.ColumnName));
 				sbClass.AppendLine();
 			}
 			sbClass.AppendLine("    }");
