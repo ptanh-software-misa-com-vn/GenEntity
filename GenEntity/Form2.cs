@@ -142,8 +142,17 @@ namespace GenEntity
 		private void GetCommandColumn()
 		{
 			DataSet ds = GetColumn();
-			StringBuilder sbClass = new StringBuilder();
+				StringBuilder sbClass = new StringBuilder();
+			SqlParameter pr = new SqlParameter("@工事コード", SqlDbType.VarChar);
+			if (chkPutArray.Checked)
+			{
+				sbClass.AppendLine("List<SqlParameter>liPr = new List<SqlParameter>();");
+			}
+			else
+			{
 			sbClass.AppendLine("SqlCommand cmd = new SqlCommand(sSQL, adbConn.Conn);");
+
+			}
 			foreach (DataRow item in ds.Tables[0].Rows)
 			{
 				EntityModel en = new EntityModel()
@@ -156,9 +165,23 @@ namespace GenEntity
 				SqlMappingData tmp = null;
 				SqlModel.DicSqlModel.TryGetValue(en.SqlServerType, out tmp);
 				en.SqlMappingData = tmp;
+				if (chkPutArray.Checked)
+				{
+					sbClass.AppendLine(string.Format(@"SqlParameter pr{0} = new SqlParameter(""@{0}"",SqlDbType.{1});", en.ColumnName, en.SqlMappingData.SqlDbEnumType, en.ColPrefix + en.ColumnName));
+					sbClass.AppendLine(string.Format(@"pr{1}.Value = a{0}.{1};", en.TableName, en.ColumnName));
+					sbClass.AppendLine(string.Format(@"liPr.Add(pr{0});", en.ColumnName));
+				}
+				else
+				{
 
 				sbClass.AppendLine(string.Format(@"cmd.Parameters.Add(""@{0}"", SqlDbType.{1}).Value = {2};", en.ColumnName, en.SqlMappingData.SqlDbEnumType, en.ColPrefix + en.ColumnName));
+				}
 			}
+			if (chkPutArray.Checked)
+			{
+				sbClass.AppendLine("SqlParameter[] arrPr = liPr.ToArray();");
+			}
+			
 			txtCode.Text = sbClass.ToString();
 		}
 
@@ -247,7 +270,7 @@ namespace GenEntity
 				SqlModel.DicSqlModel.TryGetValue(en.SqlServerType, out tmp);
 				en.SqlMappingData = tmp;
 
-				sbClass.AppendLine(string.Format(@"sbSQL.AppendLine(""       :{0}{1}{2}"");", en.ColumnName, iCnt == ds.Tables[0].Rows.Count - 1 ? "" : ",", new string('\t', 10)));
+				sbClass.AppendLine(string.Format(@"sbSQL.AppendLine(""       @{0}{1}{2}"");", en.ColumnName, iCnt == ds.Tables[0].Rows.Count - 1 ? "" : ",", new string('\t', 10)));
 				iCnt++;
 			}
 			sbClass.AppendLine(string.Format(@"sbSQL.AppendLine(""       }}{0}"");", new string('\t', 10)));
@@ -276,7 +299,10 @@ namespace GenEntity
 		{
 			DataSet ds = GetColumn();
 			StringBuilder sbClass = new StringBuilder();
-			sbClass.AppendLine("SqlCommand cmd = new SqlCommand(sSQL, adbConn.Conn);");
+			sbClass.AppendLine("StringBuilder sbSQL = new StringBuilder();");
+			sbClass.AppendLine(string.Format(@"sbSQL.AppendLine(""UPDATE {0}{1}"");", ds.Tables[0].TableName, new string('\t', 10)));
+			sbClass.AppendLine(string.Format(@"sbSQL.AppendLine(""   SET {0}"");",new string('\t', 10)));
+			var iCnt = 0;
 			foreach (DataRow item in ds.Tables[0].Rows)
 			{
 				EntityModel en = new EntityModel()
@@ -290,8 +316,10 @@ namespace GenEntity
 				SqlModel.DicSqlModel.TryGetValue(en.SqlServerType, out tmp);
 				en.SqlMappingData = tmp;
 
-				sbClass.AppendLine(string.Format(@"cmd.Parameters.Add(""@{0}"", SqlDbType.{1}).Value = {2};", en.ColumnName, en.SqlMappingData.SqlDbEnumType, en.ColPrefix + en.ColumnName));
+				sbClass.AppendLine(string.Format(@"sbSQL.AppendLine(""       {0} = @{1}{2}{3}"");", en.ColumnName, en.ColumnName, iCnt == ds.Tables[0].Rows.Count - 1 ? "" : ",", new string('\t', 10)));
+				iCnt++;
 			}
+			
 			txtCode.Text = sbClass.ToString();
 		}
 

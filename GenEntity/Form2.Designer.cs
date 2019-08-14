@@ -36,6 +36,7 @@
 			this.btnSqlInsert = new System.Windows.Forms.Button();
 			this.btnSqlUpdate = new System.Windows.Forms.Button();
 			this.btnSqlDelete = new System.Windows.Forms.Button();
+			this.chkPutArray = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// txtCode
@@ -114,11 +115,24 @@
 			this.btnSqlDelete.UseVisualStyleBackColor = true;
 			this.btnSqlDelete.Click += new System.EventHandler(this.btnSqlDelete_Click);
 			// 
+			// chkPutArray
+			// 
+			this.chkPutArray.AutoSize = true;
+			this.chkPutArray.Checked = true;
+			this.chkPutArray.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkPutArray.Location = new System.Drawing.Point(329, 45);
+			this.chkPutArray.Name = "chkPutArray";
+			this.chkPutArray.Size = new System.Drawing.Size(52, 16);
+			this.chkPutArray.TabIndex = 12;
+			this.chkPutArray.Text = "Array";
+			this.chkPutArray.UseVisualStyleBackColor = true;
+			// 
 			// Form2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(498, 307);
+			this.Controls.Add(this.chkPutArray);
 			this.Controls.Add(this.btnSqlDelete);
 			this.Controls.Add(this.btnSqlUpdate);
 			this.Controls.Add(this.btnSqlInsert);
@@ -143,5 +157,6 @@
 		private System.Windows.Forms.Button btnSqlInsert;
 		private System.Windows.Forms.Button btnSqlUpdate;
 		private System.Windows.Forms.Button btnSqlDelete;
+		private System.Windows.Forms.CheckBox chkPutArray;
 	}
 }
